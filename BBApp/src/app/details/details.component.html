@@ -1,0 +1,32 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+
+    <a [routerLink]="['/all']" >Home</a>
+    <!-- <a [routerLink]="['/quoteadd/', author._id , author.name]"> Add a quote</a> -->
+  
+    <h4>Details about {{ pet.name }}</h4>
+    {{ pet._id}}
+    <h4>Pet Type:</h4>
+    <p> {{ pet.animal_type }}</p>
+
+    <h4>Description:</h4>
+    <p> {{ pet.description }}</p>
+    <h4>Skills:</h4>
+    <p> {{ pet.skill1 }}</p>
+    <p> {{ pet.skill2 }}</p>
+    <p> {{ pet.skill3 }}</p>
+    <h4>Pet Type:</h4>
+    <p> {{ pet.animal_type }}</p>
+
+    <h4>Likes:</h4>
+    <p>{{ pet.rank }} </p>
+
+    <button (click)="upRank(pet)">Like</button> 
+
+    <button (click)="deleteByID(pet._id)">DELETE</button>
+
+
+  
+  
+  <router-outlet></router-outlet> 
+  
