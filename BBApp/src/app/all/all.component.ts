@@ -24,9 +24,30 @@ export class AllComponent implements OnInit {
     let observable = this._httpService.pets()
     observable.subscribe(data => 
       {
+        console.log(data[0]);
+        // data[0].sort(function(a,b){
+        //   return (a.animal_type > b.animal_type) ? 1 : (         (b.last_nom > a.last_nom) ? -1 : 0)
+        //   ;} 
+        // );
+
+        console.log(data);
+        // var obj = JSON.parse(data.toString());
+        // console.log(obj);
+        // data.sort((a, b) => parseFloat(a.animal_type) - parseFloat(b.animal_type));
+        //   var lates = data.sort(function(a, b){
+        //   var textA = a.DepartmentName.toUpperCase();
+        //   var textB = b.DepartmentName.toUpperCase();
+
+        //   this.pets = textA;
+        //   console.log(data);
+        //   console.log("====================================")
+        //   return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         this.pets = data;
-      }
-    )
+      })
+        
+        
+      // }
+    // )
   }
 
   by(_id){
@@ -38,12 +59,5 @@ export class AllComponent implements OnInit {
     })
   }
 
-  deleteByID(_id){
-    // console.log(_id);
-    let tempObservable = this._httpService.deleteByID(_id);
-    tempObservable.subscribe(data => {
-      console.log(data+ "345678765432123456789765432");
-    })
-    this.getPets();
-  }
+
 }

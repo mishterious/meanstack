@@ -25,8 +25,9 @@ mongoose.connect('mongodb://localhost/pets');
 var PetSchema = new mongoose.Schema({
     name:  {
         type: String, 
-        required: [true, "You need a location"],
-        minlength: 1
+        required: [true, "Name is required"],
+        minlength: [3, "Name must be at least 3 characters"],
+        unique: [true, "Name must be unique"],
         },
     animal_type: {
         type: String,
@@ -60,7 +61,7 @@ mongoose.Promise = global.Promise;
 
 //All the Views and Logic 
 app.get('/pets', function(req, res){
-    Pet.find({}, null,  {sort: {animal_type: 1}}, function(err, result){
+    Pet.find({}).sort('animal_type').exec(function(err, result){
         if(err){
             myerr = { error: "==== there is an error! ====="};
             console.log(err);
@@ -71,6 +72,7 @@ app.get('/pets', function(req, res){
         }
     });
 });
+
 
 app.get('/by/:id', function(req, res){
     console.log("INSIDE OF ID");
@@ -87,6 +89,7 @@ app.get('/by/:id', function(req, res){
         }
     });
 });
+
 
 app.get('/byName/:name', function(req, res){
     console.log("INSIDE OF ID");
@@ -105,7 +108,14 @@ app.get('/byName/:name', function(req, res){
 });
 
 
+
+
+
+
 app.post('/create', function(req, res){
+
+    
+
     console.log("----------------------------------------------")
     //Check out what we're getting from the HTMl Page:
     console.log("Post Data", req.body);
@@ -127,10 +137,7 @@ app.post('/create', function(req, res){
         pet.skill3 = req.body.skill3;
         console.log(pet.skill3t);
     }
-    // console.log(req.body.skill1);
-    // console.log(pet.skill2);
-    // console.log(req.body.skill3);
-    // console.log("ALMOS THERE FOR ADDING")
+
     pet.rank = 1;
     pet.save(function(err, result){
         console.log("are we here?")
