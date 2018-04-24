@@ -56,12 +56,14 @@ var PetSchema = new mongoose.Schema({
 // How to Retrieve the Schema and store it in the variable User
 var Pet = mongoose.model('Pet', PetSchema);
 
+
 //Promises are created to help stuff:
 mongoose.Promise = global.Promise;
 
+
 //All the Views and Logic 
 app.get('/pets', function(req, res){
-    Pet.find({}).sort('animal_type').exec(function(err, result){
+    Pet.find({}).sort('-createdAt').exec(function(err, result){
         if(err){
             myerr = { error: "==== there is an error! ====="};
             console.log(err);
@@ -108,16 +110,8 @@ app.get('/byName/:name', function(req, res){
 });
 
 
-
-
-
-
 app.post('/create', function(req, res){
-
-    
-
     console.log("----------------------------------------------")
-    //Check out what we're getting from the HTMl Page:
     console.log("Post Data", req.body);
 
     var pet = new Pet();
@@ -155,24 +149,20 @@ app.post('/create', function(req, res){
 
 
 app.post('/edit/:id', function(req,res){
-    console.log(req.params.id);
-    console.log("===============")
+
     Pet.findOne({_id: req.params.id}, function(err, pet){
         pet.name = req.body.name;
         pet.animal_type = req.body.animal_type;
         pet.description = req.body.description;
 
-        if(req.body.skill1.length > 1){
+        if(req.body.skill1){
             pet.skill1 = req.body.skill1;
-            console.log(pet.skill1);
         }
-        if(req.body.skill2.length > 1){
+        if(req.body.skill2){
             pet.skill2 = req.body.skill2;
-            console.log(pet.skill2);
         }
-        if(req.body.skill3.length > 1){
+        if(req.body.skill3){
             pet.skill3 = req.body.skill3;
-            console.log(pet.skill3t);
         }
         pet.save(function(err){
             if(err){
@@ -182,8 +172,7 @@ app.post('/edit/:id', function(req,res){
             }else{
                 console.log('==== Edit this one  === ')
                 console.log(pet);
-                console.log("were here");
-                res.redirect('/');
+                res.json(pet);
             }
         });
     });
@@ -209,9 +198,7 @@ app.get('/quotesBy/:id', function(req, res){
 
 
 app.put('/addQuote/:id', function(req, res){
-
     var newPet = req.body;
-    console.log(newPet);
 
     Pet.update({_id: req.params.id}, { $push: {messages: { quote: newPet.quote, rank: newPet.rank }}}, function(err, pet){
         if(err){
@@ -219,9 +206,7 @@ app.put('/addQuote/:id', function(req, res){
             console.log(err);
             res.json(err);
         }else{
-            console.log('==== Edit this one  === ')
             console.log(pet);
-            console.log("were here");
             res.json(pet);
         }
     });
@@ -284,9 +269,11 @@ app.delete('/delete/:id', function(req, res){
     })
 });
 
+
 app.all('*', (req, res, next) => {
     res.sendFile(path.resolve('./BBApp/dist/index.html'));
 });
+
 
 //Setting up the Server to listen to a partical port:
 app.listen(8000, function() {
